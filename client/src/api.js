@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/todo';
+const API_URL = 'https://netlify-crud-app.herokuapp.com/api/todo';
 
 export const getTodos = () => {
   return axios.get(API_URL);
