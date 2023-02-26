@@ -1,0 +1,101 @@
+.todo-list {
+  font-family: sans-serif;
+  font-size: 1.5em;
+  width: 750px;
+  height: 750px;
+  margin: 0 auto;
+  padding: 1rem;
+
+  .todo-list__form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    input[type='text'] {
+      flex-grow: 1;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      border: line;
+      font-size: 1.2rem;
+    }
+
+    button {
+      margin-left: 1rem;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      border: none;
+      background-color: #4499c7;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  .todo-list__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 1.2rem;
+
+    .todo-list__item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding: 1rem;
+      border-radius: 0.25rem;
+      background-color: #f5f5f5;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      &--completed {
+        input[type='checkbox'] + span {
+          text-decoration: line-through;
+          opacity: 0.5;
+        }
+      }
+
+      input[type='checkbox'] {
+        margin-right: 0.5rem;
+        transform: scale(1.3);
+      }
+
+      span {
+        flex: 1;
+        text-align: left;
+      }
+
+      button {
+        border: none;
+        cursor: pointer;
+
+        &.todo-list__item-edit,
+        &.todo-list__item-delete {
+          text-decoration: none;
+        }
+
+        &.todo-list__item-edit {
+          margin-right: 10px;
+          background-color: #cdcdd1;
+          border-radius: 0.25rem;
+          font-size: 1.1rem;
+        }
+
+        &.todo-list__item-delete {
+          background-color: #f44336;
+          color: #fff;
+          border-radius: 0.25rem;
+          font-size: 1.1rem;
+        }
+      }
+
+      .todo-list__item-actions > button {
+        margin-left: 10px;
+        border-radius: 0.25rem;
+        font-size: 1.1rem;
+        text-decoration: none;
+        color: #000;
+      }
+    }
+  }
+}
