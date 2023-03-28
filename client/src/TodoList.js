@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getTodos, createTodo, updateTodo, deleteTodo } from './api';
 import './TodoList.scss';
 
-function TodoList() {
+function TodoList({ role }) {
   const [todos, setTodos] = useState([]);
   const [newTodoText, setNewTodoText] = useState('');
 
@@ -38,7 +38,7 @@ function TodoList() {
 
   const handleTodoUpdate = (id, updates) => {
     updateTodo(id, updates)
-      .then(() => {
+      .then((response) => {
         refreshTodos();
       })
       .catch((error) => {
@@ -48,57 +48,68 @@ function TodoList() {
 
   const handleTodoDelete = (id) => {
     deleteTodo(id)
-      .then(() => {
+      .then((response) => {
         refreshTodos();
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  
 
-  
+  const canAddTask = role === 'Admin' || role === 'User';
+  const canEditTask = role === 'Admin';
+  const canDeleteTask = role === 'Admin'|| role === 'User';
+  const canCheckmarkTask = role === 'User' || role === 'Admin';
 
   return (
     <div className="todo-list">
       <h1>Todo List</h1>
-      <form className="todo-list__form" onSubmit={handleNewTodoSubmit}>
-        <input type="text" value={newTodoText} onChange={handleNewTodoChange} placeholder="Add new task" />
-        <button type="submit">Add</button>
-      </form>
+      {canAddTask && (
+        <form className="todo-list__form" onSubmit={handleNewTodoSubmit}>
+          <input
+            type="text"
+            value={newTodoText}
+            onChange={handleNewTodoChange}
+            placeholder="Add new task"
+          />
+          <button type="submit">Add</button>
+        </form>
+      )}
       <div className="todo-list__items">
         {todos.map((todo) => (
-          <div className={`todo-list__item ${todo.completed ? 'todo-list__item--completed' : ''}`} key={todo._id}>
+          <div
+            className={`todo-list__item ${
+              todo.completed ? 'todo-list__item--completed' : ''
+            }`}
+            key={todo._id}
+          >
             <input
               type="checkbox"
               checked={todo.completed}
-              onChange={(event) =>
-                handleTodoUpdate(todo._id, { completed: event.target.checked })
+              onChange={() =>
+                canCheckmarkTask &&
+                handleTodoUpdate(todo._id, { completed: !todo.completed })
               }
             />
-            <span className="todo-list__item-text">{todo.text}</span>
-            <div className="todo-list__item-actions">
-              <button
-                className={`todo-list__item-edit ${todo.completed ? 'todo-list__item-edit--disabled' : ''}`}
-                onClick={() =>
-                  handleTodoUpdate(todo._id, { text: prompt('Enter new text for the task:', todo.text) })
+            {canEditTask ? (
+              <input
+                type="text"
+                value={todo.text}
+                onChange={(event) =>
+                  handleTodoUpdate(todo._id, { text: event.target.value })
                 }
-                disabled={todo.completed}
-              >
-                Edit
-              </button>
-              <button
-                className="todo-list__item-delete"
-                onClick={() => handleTodoDelete(todo._id)}
-              >
-                Delete
-              </button>
-            </div>
+              />
+            ) : (
+              <span>{todo.text}</span>
+            )}
+            {canDeleteTask && (
+              <button onClick={() => handleTodoDelete(todo._id)}>Delete</button>
+            )}
           </div>
         ))}
-      </div>
-    </div>
-  );
+       </div>
+</div>
+);
 }
 
 export default TodoList;
